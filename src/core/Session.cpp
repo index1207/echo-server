@@ -20,6 +20,16 @@ void Session::Run(std::unique_ptr<net::socket>&& sock)
     OnConnected(_sock->get_remote_endpoint().value());
 }
 
+void Session::Send(std::span<char> data)
+{
+    auto ctx = new net::context;
+    ctx->buffer = data;
+    ctx->completed = std::bind(&Session::OnSendCompleted, this, std::placeholders::_1, std::placeholders::_2);
+
+    if (!_sock->send(ctx))
+        OnSendCompleted(ctx, false);
+}
+
 void Session::OnReceiveCompleted(net::context* ctx, bool success)
 {
     if (ctx->length == 0)
@@ -35,7 +45,11 @@ void Session::OnReceiveCompleted(net::context* ctx, bool success)
     }
 }
 
-void Session::OnSendCompleted(net::context* ctx, bool)
+void Session::OnSendCompleted(net::context* ctx, bool success)
 {
-
+    if (success)
+    {
+        OnSent(ctx->length);
+    }
+    delete ctx;
 }

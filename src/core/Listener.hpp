@@ -15,11 +15,11 @@ public:
     requires std::is_base_of_v<Session, SessionClass>
     static std::unique_ptr<Listener> Open()
     {
-        auto listener = std::unique_ptr<Listener>(new Listener);
+        auto listener = new Listener;
         listener->_sessionFactory = []() {
             return std::make_shared<SessionClass>();
         };
-        return std::move(listener);
+        return std::unique_ptr<Listener>(listener);
     }
 public:
     void Run(net::endpoint endpoint);

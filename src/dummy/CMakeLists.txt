@@ -1,6 +1,6 @@
 file(GLOB SOURCE_FILES *.cpp)
 
-set(BINARY_NAME "client")
+set(BINARY_NAME "dummyTest")
 
 add_executable(${BINARY_NAME} ${SOURCE_FILES})
 
