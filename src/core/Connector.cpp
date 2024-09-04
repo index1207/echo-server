@@ -26,6 +26,7 @@ void Connector::OnConnectCompleted(net::context* ctx, bool success)
     else
     {
         fmt::println("Failed to connect with server.");
+        exit(EXIT_FAILURE);
     }
     delete ctx;
 }

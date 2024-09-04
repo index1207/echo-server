@@ -39,11 +39,11 @@ void Listener::OnAcceptCompleted(net::context* ctx, bool success)
         session->Run(std::move(ctx->accept_socket));
 
         ctx->accept_socket = std::make_unique<net::socket>();
-        if (!_sock.accept(ctx))
-            OnAcceptCompleted(ctx, false);
     }
     else
     {
         fmt::println("Accept Failed.");
     }
+    if (!_sock.accept(ctx))
+        OnAcceptCompleted(ctx, false);
 }

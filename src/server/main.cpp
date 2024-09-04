@@ -4,28 +4,28 @@
 
 #include <fmt/core.h>
 
+std::string d = "h";
+
 class EchoSession : public Session
 {
 public:
     void OnConnected(net::endpoint endpoint) override
     {
-        fmt::println("Connected {}", endpoint.to_string());
+        fmt::println("Connected to {}", endpoint.to_string());
     }
 
     void OnDisconnected(net::endpoint endpoint) override
     {
-        fmt::println("Disconnected {}", endpoint.to_string());
+        fmt::println("Disconnected with {}", endpoint.to_string());
     }
 
     void OnReceived(std::span<char> buffer, unsigned length) override
     {
-        fmt::println("Receive {} bytes.", length);
-        Send(buffer.subspan(0, length));
+        Send(d);
     }
 
     void OnSent(unsigned length) override
     {
-        fmt::println("Sent {}", length);
     }
 };
 

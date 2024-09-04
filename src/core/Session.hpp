@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <net/socket.hpp>
+#include <net/context.hpp>
 
 class Session : public std::enable_shared_from_this<Session>
 {
@@ -22,6 +23,8 @@ private:
     void OnReceiveCompleted(net::context*, bool);
     void OnSendCompleted(net::context*, bool);
 private:
+    net::context _recvCtx;
+    net::context _sendCtx;
     std::shared_ptr<Session> _thisPtr;
     std::unique_ptr<net::socket> _sock;
     char _buffer[0x10000];
