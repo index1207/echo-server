@@ -16,10 +16,9 @@ public:
     {
         fmt::println("Connected to {}", endpoint.to_string());
 
-        char buffer[1024];
-        memset(buffer, 'A', sizeof(buffer));
-
-        Send(buffer);
+        std::string data;
+        std::cin >> data;
+        Send(data);
     }
 
     void OnDisconnected(net::endpoint endpoint) override
@@ -29,11 +28,16 @@ public:
 
     void OnReceived(std::span<char> buffer, unsigned length) override
     {
-        Send(buffer.subspan(0, length));
+        fmt::println("Received {} bytes", length);
+
+        std::string data;
+        std::cin >> data;
+        Send(data);
     }
 
     void OnSent(unsigned length) override
     {
+        fmt::println("Sent {} bytes", length);
     }
 };
 

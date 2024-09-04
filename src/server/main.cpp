@@ -4,8 +4,6 @@
 
 #include <fmt/core.h>
 
-std::string d = "h";
-
 class EchoSession : public Session
 {
 public:
@@ -21,7 +19,7 @@ public:
 
     void OnReceived(std::span<char> buffer, unsigned length) override
     {
-        Send(d);
+        Send(buffer.subspan(0, length));
     }
 
     void OnSent(unsigned length) override
