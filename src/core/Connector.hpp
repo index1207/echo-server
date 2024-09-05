@@ -25,6 +25,6 @@ private:
 private:
     Connector();
 private:
-    std::unique_ptr<net::socket> _sock;
+    net::socket _sock;
     std::function<std::shared_ptr<Session>()> _sessionFactory;
 };

@@ -11,7 +11,7 @@ public:
     Session();
     virtual ~Session();
 public:
-    void Run(std::unique_ptr<net::socket>&& sock);
+    void Run(const net::socket& sock);
 
     void Send(std::span<char> data);
 public:
@@ -26,6 +26,6 @@ private:
     net::context _recvCtx;
     net::context _sendCtx;
     std::shared_ptr<Session> _thisPtr;
-    std::unique_ptr<net::socket> _sock;
+    net::socket _sock;
     char _buffer[0x10000];
 };

@@ -21,7 +21,9 @@ void Listener::Run(net::endpoint endpoint)
             throw net::network_exception("listen");
 
         auto ctx = new net::context;
-        ctx->completed = std::bind(&Listener::OnAcceptCompleted, this, std::placeholders::_1, std::placeholders::_2);
+        ctx->completed = [&](net::context* ctx, bool success) {
+            OnAcceptCompleted(ctx, success);
+        };
         if (!_sock.accept(ctx))
             OnAcceptCompleted(ctx, false);
     }
@@ -36,9 +38,7 @@ void Listener::OnAcceptCompleted(net::context* ctx, bool success)
     if (success)
     {
         auto session = _sessionFactory();
-        session->Run(std::move(ctx->accept_socket));
-
-        ctx->accept_socket = std::make_unique<net::socket>();
+        session->Run(*ctx->accept_socket);
     }
     else
     {

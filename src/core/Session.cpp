@@ -5,10 +5,10 @@
 Session::Session() : _buffer {0,} {}
 Session::~Session() = default;
 
-void Session::Run(std::unique_ptr<net::socket>&& sock)
+void Session::Run(const net::socket& sock)
 {
     _thisPtr = shared_from_this();
-    _sock = std::move(sock);
+    _sock = sock;
 
     _recvCtx.buffer = _buffer;
     _recvCtx.completed = [&](net::context* ctx, bool success) {
@@ -18,17 +18,17 @@ void Session::Run(std::unique_ptr<net::socket>&& sock)
         OnSendCompleted(ctx, success);
     };
 
-    if (!_sock->receive(&_recvCtx))
+    if (!_sock.receive(&_recvCtx))
         OnReceiveCompleted(&_recvCtx, false);
 
-    OnConnected(_sock->get_remote_endpoint().value());
+    OnConnected(_sock.get_remote_endpoint().value());
 }
 
 void Session::Send(std::span<char> data)
 {
     _sendCtx.buffer = data;
 
-    if (!_sock->send(&_sendCtx))
+    if (!_sock.send(&_sendCtx))
         OnSendCompleted(&_sendCtx, false);
 }
 
@@ -36,12 +36,12 @@ void Session::OnReceiveCompleted(net::context* ctx, bool success)
 {
     if (!success || ctx->length == 0)
     {
-        OnDisconnected(_sock->get_remote_endpoint().value());
+        OnDisconnected(_sock.get_remote_endpoint().value());
         _thisPtr = nullptr;
         return;
     }
     OnReceived(_buffer, ctx->length);
-    if (!_sock->receive(ctx))
+    if (!_sock.receive(ctx))
         OnReceiveCompleted(ctx, false);
 }
 
