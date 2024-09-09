@@ -4,7 +4,7 @@
 
 Connector::Connector()
 {
-    _sock.create(net::protocol::tcp);
+    _sock = std::make_shared<net::socket>(net::protocol::tcp);
 }
 
 void Connector::Run(net::endpoint endpoint)
@@ -14,7 +14,7 @@ void Connector::Run(net::endpoint endpoint)
     ctx->completed = [&](net::context* ctx, bool success) {
         OnConnectCompleted(ctx, success);
     };
-    if (!_sock.connect(ctx))
+    if (!_sock->connect(ctx))
         OnConnectCompleted(ctx, false);
 }
 

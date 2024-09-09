@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 
 #include <net/socket.hpp>
 #include <net/context.hpp>
@@ -11,7 +12,7 @@ public:
     Session();
     virtual ~Session();
 public:
-    void Run(const net::socket& sock);
+    void Run(const std::shared_ptr<net::socket>& sock);
 
     void Send(std::span<char> data);
 public:
@@ -23,9 +24,10 @@ private:
     void OnReceiveCompleted(net::context*, bool);
     void OnSendCompleted(net::context*, bool);
 private:
+    std::mutex _mtx;
     net::context _recvCtx;
     net::context _sendCtx;
     std::shared_ptr<Session> _thisPtr;
-    net::socket _sock;
+    std::shared_ptr<net::socket> _sock;
     char _buffer[0x10000];
 };

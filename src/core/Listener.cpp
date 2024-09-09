@@ -15,10 +15,10 @@ void Listener::Run(net::endpoint endpoint)
     try
     {
         if (!_sock.bind(endpoint))
-            throw net::network_exception("bind()");
+            throw net::exception("bind()");
 
         if (!_sock.listen())
-            throw net::network_exception("listen");
+            throw net::exception("listen");
 
         auto ctx = new net::context;
         ctx->completed = [&](net::context* ctx, bool success) {
@@ -38,7 +38,7 @@ void Listener::OnAcceptCompleted(net::context* ctx, bool success)
     if (success)
     {
         auto session = _sessionFactory();
-        session->Run(*ctx->accept_socket);
+        session->Run(ctx->accept_socket);
     }
     else
     {
