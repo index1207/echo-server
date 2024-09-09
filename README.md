@@ -10,4 +10,5 @@ cmake --build build --config Release
 ```
 
 ## 테스트 결과
-[윈도우 환경 스트레스 테스트](https://www.youtube.com/watch?v=rrEsN-b9aU8)
+[윈도우 환경 스트레스 테스트](https://www.youtube.com/watch?v=rrEsN-b9aU8) <br>
+[리눅스 환경 스트레스 테스트](https://www.youtube.com/watch?v=VXUFfou_gxo)
